@@ -8,6 +8,20 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div id="GUI">
+        <div id="drop">
+
+        </div>
+        <div id="g_day">
+            <div id="box">Monday</div>
+            <div id="box">Tuesday</div>
+            <div id="box">Wednsday</div>
+            <div id="box">Thursday</div>
+            <div id="box">Friday</div>
+            <div id="box">Saturday</div>
+            <div id="box">Sunday</div>
+        </div>
+    </div>
     <div id="container">
         <div id="scr">0</div>
         <div id="down">
@@ -22,14 +36,22 @@
             </div>
             <div id="right">
                 <div id="day">
-                    <div id="box" class="new_task">+</div><div id="single"></div>
-                </div>
+                    <div id="box" class="new_task">+</div>
+                    <div id="month_holder">
+                        <div class="button" onclick="click_Handler(this.parentElement, this)"><</div>
+                        <div id="dropdown" class="button" onclick="click_Handler(this.parentElement, this)">October 2023</div>
+                        <div class="button" onclick="click_Handler(this.parentElement, this)">></div>
+                    </div>
+                    </div>
                 <div id="dat">
                     <div id="line"></div>
                     <div id="task"></div>
                     <div id="holder">
-                        <div id="d_left"><div id="time"><div id="box" class="time">0:00</div><div id="box" class="time">1:00</div><div id="box" class="time">2:00</div><div id="box" class="time">3:00</div><div id="box" class="time">4:00</div><div id="box" class="time">5:00</div><div id="box" class="time">6:00</div><div id="box" class="time">7:00</div><div id="box" class="time">8:00</div><div id="box" class="time">9:00</div><div id="box" class="time">10:00</div><div id="box" class="time">11:00</div><div id="box" class="time">12:00</div><div id="box" class="time">13:00</div><div id="box" class="time">14:00</div><div id="box" class="time">15:00</div><div id="box" class="time">16:00</div><div id="box" class="time">17:00</div><div id="box" class="time">18:00</div><div id="box" class="time">19:00</div><div id="box" class="time">20:00</div><div id="box" class="time">21:00</div><div id="box" class="time">22:00</div><div id="box" class="time">23:00</div></div></div>
+                        <div id="d_left">
+                            
+                        </div>
                         <div id="d_right">
+                            
                         </div>
                     </div>
                 </div>

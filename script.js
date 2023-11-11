@@ -1,41 +1,160 @@
-// window.addEventListener('load', ()=>{
-//     let add = 1;
-//     for(i = 0; i < 24 * 8; i++){
-//         let box = document.createElement('div');
-//         box.setAttribute('id', 'box');
-//         if(i == add-1){
-//             box.innerText = Math.floor(i/8) + ':00';
-//             box.setAttribute('class', 'time');
-//             add+=8;
-//         }
-//         document.getElementById('dat').appendChild(box);
-//     }
-// })
-
 let ms = []
 let hght = 0;
 let offset = 0
 let date_index = undefined
 let date = new Date();
+let cmonth = date.getMonth();
+console.log(cmonth);
+let cyear = date.getFullYear();
+let ap_year = cyear;
+let pr_year = cyear;
+let dropdown_open = false;
 
 let day_names = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+let months = {
+    'Januray': 31,
+    'February': 28,
+    'March': 31,
+    'April': 30,
+    'May': 31,
+    'June': 30,
+    'July': 31,
+    'August': 31,
+    'September': 30,
+    'October': 31,
+    'November': 30,
+    'December': 31,
+}
+
+//istance days of set set month
+
+function istance_month_days(parent, month, year){
+    let skip = new Date(year + "-" + (month + 1)).getDay()-1;
+    if(skip == 6) skip = 0;
+
+    for(i = 0; i < skip; i++){
+        let empty = document.createElement('div');
+        empty.setAttribute('id', 'box');
+        empty.setAttribute('class', 'month_days_empty');
+        parent.appendChild(empty);
+    }
+    for(i = 0; i < months[Object.keys(months)[month]]; i++){
+        let box = document.createElement('div');
+        box.setAttribute('id', 'box');
+        box.setAttribute('class', 'month_days');
+        box.innerHTML = "<div id='day_id'>"+ (i + 1) +"</div>";
+        parent.appendChild(box);
+    }
+}
+
+
+//istance month selector
+
+function istance_month_selector(year){
+    const drop = document.getElementById('drop');
+    switch(dropdown_open){
+        case false:
+            let mn_holder = document.createElement('div');
+            for(i = 0; i <= 11; i++){
+                let box = document.createElement('div');
+                box.setAttribute('id', 'd_m');
+                box.setAttribute('onclick', 'selector_handle_change('+ i +', '+ year +')')
+                box.innerText = Object.keys(months)[i] + ' ' + year;
+                if(i == cmonth){
+                    box.setAttribute('class', 'current');
+                }
+                mn_holder.appendChild(box);
+            }
+            drop.appendChild(mn_holder);
+            dropdown_open = true;
+            Array.prototype.slice.call(mn_holder.children)[cmonth].scrollIntoView();
+            break;
+        case true: console.log('clearing...'); drop.innerHTML = ''; dropdown_open = false; return;
+    }
+
+}
+
+
+function expand_on_scroll(option, year){
+    switch(dropdown_open){
+        case true:
+            const drop = document.getElementById('drop');
+            let mn_holder = document.createElement('div');
+            for(i = 0; i <= 11; i++){
+                let box = document.createElement('div');
+                box.setAttribute('id', 'd_m');
+                box.setAttribute('onclick', 'selector_handle_change('+ i +', '+ year +')')
+                box.innerText = Object.keys(months)[i] + ' ' + year;
+                mn_holder.appendChild(box);
+            }
+
+            switch(option){
+                case 'append': drop.appendChild(mn_holder); break;
+                case 'prepend': 
+                    drop.prepend(mn_holder); 
+                    Array.prototype.slice.call(mn_holder.children)[1].scrollIntoView();
+                    break;
+                default: return;
+            }
+
+            return;
+        default: return;
+    }
+}
+
+function selector_handle_change(month, year){
+    document.getElementById('drop').innerHTML = ''; dropdown_open = false;
+    selector_changemonth(month,year);
+}
+
+function selector_changemonth(month, year){
+    document.getElementById('d_right').innerHTML = '';
+    istance_month_days(document.getElementById('d_right'), month, year)
+    cyear = year;
+    cmonth = month;
+    document.getElementById('dropdown').innerText = Object.keys(months)[month] + ' ' + year;
+}
+
+
+
+//Update time each second
 
 setInterval(Update, 1000);
-
 function Update(){
     date = new Date();
+
 }
 
+
+//Get height of box adequately to users screen size
+
 window.onload = function(){
+    istance_month_days(document.getElementById('d_right'), cmonth, cyear);
     hght = (document.getElementById('d_right').clientHeight / 24);
     offset = document.getElementById('d_right').offsetTop;
+
+    const drp = document.getElementById('drop')
+    drp.addEventListener('scroll', (ev)=>{
+        if(drp.scrollHeight - drp.scrollTop - drp.clientHeight <= 5)
+        {
+            ap_year++;
+           expand_on_scroll('append', ap_year);
+        }
+        if(drp.scrollTop == 0){
+            pr_year--;
+            expand_on_scroll('prepend', pr_year);
+        }
+    })   
 }
+
+
+//Time visualizer + line signalizator on mouse move
 
 addEventListener('mousemove', (e)=>{
     const line = document.getElementById('line');
     ms = [e.pageX, e.pageY];
 
-    switch(e.target.parentElement.getAttribute('id') == 'd_right'){
+    switch(e.target.parentElement.getAttribute('id') == 'd_right' && (![2,3].includes(date_index))){
         case true:        
             document.getElementById('scr').style.display = 'block';
             line.style.display = 'block';
@@ -81,14 +200,17 @@ function zip_change(ziper, box){
 
     selector.style.marginLeft = 'calc((16vw / 4) * ' + date_index + ')';
 
+    const holder = document.getElementById('holder');
     const top = document.getElementById('day');
-    const right = document.getElementById('d_right');
-    console.log(date.getDay());
+    document.getElementById('drop').innerHTML = ''; dropdown_open = false
+    document.getElementById('g_day').style.display = 'none';
+
     switch(date_index){
         case 0:
+            holder.innerHTML = `
+            <div id="d_left"><div id="time"><div id="box" class="time">0:00</div><div id="box" class="time">1:00</div><div id="box" class="time">2:00</div><div id="box" class="time">3:00</div><div id="box" class="time">4:00</div><div id="box" class="time">5:00</div><div id="box" class="time">6:00</div><div id="box" class="time">7:00</div><div id="box" class="time">8:00</div><div id="box" class="time">9:00</div><div id="box" class="time">10:00</div><div id="box" class="time">11:00</div><div id="box" class="time">12:00</div><div id="box" class="time">13:00</div><div id="box" class="time">14:00</div><div id="box" class="time">15:00</div><div id="box" class="time">16:00</div><div id="box" class="time">17:00</div><div id="box" class="time">18:00</div><div id="box" class="time">19:00</div><div id="box" class="time">20:00</div><div id="box" class="time">21:00</div><div id="box" class="time">22:00</div><div id="box" class="time">23:00</div></div></div>
+            <div id="d_right"><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div></div>`
             top.innerHTML = '<div id="box" class="new_task">+</div><div id="single">'+ day_names[date.getDay()] +'</div>';
-            right.innerHTML = `<div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div><div id="single_box"></div>
-            `;
             break;
         case 1:
             top.innerHTML = `
@@ -100,9 +222,82 @@ function zip_change(ziper, box){
             <div id="box">Friday</div>
             <div id="box">Saturday</div>
             <div id="box">Sunday</div>`;
-            right.innerHTML = `<div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div>`;
+
+            holder.innerHTML = `<div id="holder">
+            <div id="d_left"><div id="time"><div id="box" class="time">0:00</div><div id="box" class="time">1:00</div><div id="box" class="time">2:00</div><div id="box" class="time">3:00</div><div id="box" class="time">4:00</div><div id="box" class="time">5:00</div><div id="box" class="time">6:00</div><div id="box" class="time">7:00</div><div id="box" class="time">8:00</div><div id="box" class="time">9:00</div><div id="box" class="time">10:00</div><div id="box" class="time">11:00</div><div id="box" class="time">12:00</div><div id="box" class="time">13:00</div><div id="box" class="time">14:00</div><div id="box" class="time">15:00</div><div id="box" class="time">16:00</div><div id="box" class="time">17:00</div><div id="box" class="time">18:00</div><div id="box" class="time">19:00</div><div id="box" class="time">20:00</div><div id="box" class="time">21:00</div><div id="box" class="time">22:00</div><div id="box" class="time">23:00</div></div></div>
+            <div id="d_right"><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div><div id="box"></div></div>
+        </div>`;
             break;
+            
+            case 2:
+                document.getElementById('g_day').style.display = 'flex';
+                top.innerHTML = ` <div id="box" class="new_task">+</div>
+                <div id="month_holder">
+                    <div class="button" onclick="click_Handler(this.parentElement, this)"><</div>
+                    <div id="dropdown" class="button" onclick="click_Handler(this.parentElement, this)">`+ Object.keys(months)[cmonth] + ` `+ cyear + `</div>
+                    <div class="button" onclick="click_Handler(this.parentElement, this)">></div>
+                </div>
+                </div>`;
+
+                holder.innerHTML = `                        
+                <div id="d_right" style='padding-top: calc(1.5vh + 1.5vw);'>
+                    
+                </div>`;
+                istance_month_days(document.getElementById('d_right'), cmonth, cyear);
+            break;
+            default: return;
     }
 
     last = box;
 }
+
+
+
+
+
+//Click Handler
+
+function click_Handler(parent, element){
+    switch(parent.getAttribute('id')){
+        case 'month_holder':
+            change_month(parent, element);
+            break;
+    }
+}
+
+
+
+//month_changer
+
+
+function change_month(block,button){
+    ap_year = cyear;
+    pr_year = cyear;
+
+    switch(Array.prototype.indexOf.call(block.children, button)){
+        case 0: 
+            document.getElementById('drop').innerHTML = ''; dropdown_open = false;
+            if(!(cmonth < 1)){
+                cmonth--; 
+            }else { cmonth = 11; cyear--; }
+            break;
+        case 1:
+            console.log('at_first: ' + dropdown_open);
+            istance_month_selector(cyear);
+            console.log(dropdown_open);
+            break;
+        case 2: 
+            document.getElementById('drop').innerHTML = ''; dropdown_open = false;
+            if(!(cmonth > 10)){
+                cmonth++; 
+            }else { cmonth = 0; cyear++; }
+            break;
+        default: return;
+    }
+    document.getElementById('d_right').innerHTML = '';
+    istance_month_days(document.getElementById('d_right'), cmonth, cyear);
+    block.children[1].innerText = Object.keys(months)[cmonth] + ' ' + cyear;
+
+}
+
+

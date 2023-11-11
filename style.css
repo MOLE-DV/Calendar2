@@ -7,6 +7,8 @@
 
 :root{
     --left_panel_size: 18vw;
+    --blue: rgb(117, 117, 255);
+    --yellow: rgb(255, 183, 0);
 }
 
 #container{
@@ -40,17 +42,18 @@
 
 #holder #d_right{
     width: calc(100vw - var(--left_panel_size));
+    height: fit-content;
 }
 
 #dat{
     width: calc(100vw - var(--left_panel_size));
-    height: calc(24 * calc(4vh + 4vw));
+    height: fit-content;
     border-collapse: collapse;
     margin-top: calc(2vh + 2vw);
     margin-left: var(--left_panel_size);
 }
 
-#single{
+#single, #drp_sel{
     width: calc(100% - calc(2vh + 2vw));
     display: flex;
     justify-content: center;
@@ -76,6 +79,8 @@
     border-collapse: collapse;
 }
 
+
+
 #single_box{
     width: calc(calc(100vw - var(--left_panel_size)) - calc(2vh + 2vw));
 }
@@ -97,7 +102,7 @@
 
 #line{
     position: absolute;
-    background-color: rgb(117, 117, 255);
+    background-color: var(--blue);
     z-index: 999;
     width: 100vw;
     pointer-events: none;
@@ -109,7 +114,7 @@
     position: absolute;
     font-size: calc(1vh + 1vw);
     font-family: Arial, Helvetica, sans-serif;
-    color: rgb(117, 117, 255);
+    color: var(--blue);
     pointer-events: none;
     z-index: 9999;
 }
@@ -124,6 +129,7 @@
     background-color: rgb(237, 237, 237);
     box-shadow: 0 calc(.1vh + .1vw) calc(.1vh + .1vw) rgba(0, 0, 0, 0.206);
     position: fixed;
+    z-index: 10;
 }
 
 
@@ -135,20 +141,21 @@
     transition: .1s;
 }
 
+
 #day #box:hover, #box.time:hover, #settings .button:hover{
-    background-color: rgb(117, 117, 255);
+    background-color: var(--blue);
     color: white;
 }
 
 #day #box.new_task{
     width: calc(2vh + 2vw);
     font-size: calc(1.5vh + 1.5vh);
-    background-color: rgb(117, 117, 255);
+    background-color: var(--blue);
     color: white;
 }
 
 #day #box.new_task:hover{
-    background-color: rgb(255, 183, 0);
+    background-color: var(--yellow);
     color: black;
 }
 
@@ -174,7 +181,7 @@
 }
 
 #title span{
-    color: rgb(117, 117, 255);
+    color: var(--blue);
 }
 
 /* settings */
@@ -230,10 +237,166 @@
 
 #selector{
     position: absolute;
-    background-color: rgb(117, 117, 255);;
+    background-color: var(--blue);
     width: calc(16vw / 4);
     height: calc(2vh + 2vw);
     margin-left: calc((16vw / 4) * 0);
     transition: .3s;
 }
 
+
+
+
+
+
+
+
+
+
+
+/* Month Tab */
+
+
+#box.month_days, #box.month_days_empty{
+    height: calc((calc(100vw - var(--left_panel_size))) / 7);
+    width: calc((calc(100vw - var(--left_panel_size))) / 7);
+    justify-content: left;
+    background-color: white;
+    z-index: 0;
+    position: relative;
+}
+
+
+#box.month_days:hover{
+    z-index: 1;
+    box-shadow: 0 0 calc(.5vh + .5vw) rgba(0, 0, 0, 0.206)
+}
+
+
+#box #day_id{
+   position: absolute;
+   height: calc(1vh + 1vw);
+   width: calc(1vh + 1vw);
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   font-size: calc(.7vh + .7vw);
+   color: white;
+   border-radius: 0px 0px calc(.1vh + .1vw) 0px;
+   background-color: var(--blue); 
+}
+
+#box.month_days, #box #day_id{
+    transition: .2s;
+}
+
+
+/* button panel */
+
+
+
+#month_holder .button{
+    width: calc(1.5vh + 1.5vw);
+    height: calc(1.5vh + 1.5vw);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    pointer-events: all;
+    cursor: pointer;
+}
+
+#month_holder #dropdown.button{
+    width: calc(10vh + 10vw);
+    background-color: white;
+}
+
+
+
+
+
+
+/* GUI */
+
+#GUI{
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+#GUI #drop{
+    z-index: 9999;
+    pointer-events: all;
+    box-shadow: 0 calc(.1vh + .1vw) calc(.1vh + .1vw) rgba(0, 0, 0, 0.206);
+    position: absolute;
+    width: calc(10vh + 10vw);
+    max-height: calc(10vh + 10vw);
+    background-color: white;
+    left: calc(var(--left_panel_size) + calc(2vh + 2vw) + calc(100vw - var(--left_panel_size) - calc(2vh + 2vw)) / 2 - calc(2 * calc(1.5vh + 1.5vw) + calc(10vh + 10vw)) / 2 + calc(1.5vh + 1.5vw));
+    top: calc(calc(2vh + 2vw) / 2 + calc(1.5vh + 1.5vw) / 2);
+}
+
+#GUI #drop::-webkit-scrollbar{
+    display: block;
+    width: calc(.4vh + .4vw);
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+#GUI #drop::-webkit-scrollbar-thumb{
+    background-color: rgba(0, 0, 0, 0.202);
+}
+
+#GUI #drop #d_m{
+    user-select: none;
+    cursor: pointer;
+    font-family: Arial, Helvetica, sans-serif;
+    height: calc(1.5vh + 1.5vw);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: .1s;
+}
+
+#GUI #drop #d_m:hover, #GUI #drop #d_m.current:hover{
+    background-color: var(--blue);
+    color: white;
+}
+
+#GUI #drop #d_m.current{
+    background-color: rgba(2, 2, 2, 0.076)
+}
+
+#month_holder .button:hover, #month_holder #dropdown.button:hover{
+    background-color: var(--blue);
+    color: white;
+    transition: .2s;
+}
+
+
+
+#g_day{
+    display: none;
+    position: absolute;
+    height: calc(1.5vh + 1.5vw);
+    background-color: rgb(255, 255, 255);
+    width: calc(100vw - var(--left_panel_size));
+    left: var(--left_panel_size);
+    box-shadow: 0 calc(.1vh + .1vw) calc(.1vh + .1vw) rgba(0, 0, 0, 0.206);
+    top: calc(2vh + 2vw);
+}
+
+#g_day #box{
+    width: calc((100vw - var(--left_panel_size)) / 7); 
+    display: flex;
+    line-height: calc(1.5vh + 1.5vw);
+}
+
+#month_holder{
+    display: flex;
+    align-items: center;
+    font-family: Arial, Helvetica, sans-serif;
+    justify-content: center;
+    width: calc(100vw - var(--left_panel_size) - calc(2vh + 2vw));
+}
