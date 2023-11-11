@@ -4,7 +4,6 @@ let offset = 0
 let date_index = undefined
 let date = new Date();
 let cmonth = date.getMonth();
-console.log(cmonth);
 let cyear = date.getFullYear();
 let ap_year = cyear;
 let pr_year = cyear;
@@ -30,7 +29,8 @@ let months = {
 
 function istance_month_days(parent, month, year){
     let skip = new Date(year + "-" + (month + 1)).getDay()-1;
-    if(skip == 6) skip = 0;
+    if(skip == -1) skip = 6;
+    console.log(skip);
 
     for(i = 0; i < skip; i++){
         let empty = document.createElement('div');
@@ -69,7 +69,7 @@ function istance_month_selector(year){
             dropdown_open = true;
             Array.prototype.slice.call(mn_holder.children)[cmonth].scrollIntoView();
             break;
-        case true: console.log('clearing...'); drop.innerHTML = ''; dropdown_open = false; return;
+        case true: drop.innerHTML = ''; dropdown_open = false; return;
     }
 
 }
@@ -133,6 +133,8 @@ window.onload = function(){
     hght = (document.getElementById('d_right').clientHeight / 24);
     offset = document.getElementById('d_right').offsetTop;
 
+    zip_change(document.getElementById('zipper'), Array.prototype.slice.call(document.getElementById('zipper').children)[1]);
+
     const drp = document.getElementById('drop')
     drp.addEventListener('scroll', (ev)=>{
         if(drp.scrollHeight - drp.scrollTop - drp.clientHeight <= 5)
@@ -183,12 +185,6 @@ addEventListener('mousemove', (e)=>{
 })
 
 
-addEventListener('keydown', (k)=>{
-    if(k.key == 'e'){
-        console.log(hght);
-        document.getElementById('task').style.top = offset + hght * 2 + 'px';
-    }
-})
 
 let last = undefined
 
@@ -197,7 +193,7 @@ function zip_change(ziper, box){
     if(last != undefined) last.style.color = 'black';
     box.style.color = 'white';
     date_index = ((Array.prototype.slice.call(ziper.children).indexOf(box)) - 1);
-
+    last = box;
     selector.style.marginLeft = 'calc((16vw / 4) * ' + date_index + ')';
 
     const holder = document.getElementById('holder');
@@ -248,7 +244,6 @@ function zip_change(ziper, box){
             default: return;
     }
 
-    last = box;
 }
 
 
@@ -282,9 +277,7 @@ function change_month(block,button){
             }else { cmonth = 11; cyear--; }
             break;
         case 1:
-            console.log('at_first: ' + dropdown_open);
             istance_month_selector(cyear);
-            console.log(dropdown_open);
             break;
         case 2: 
             document.getElementById('drop').innerHTML = ''; dropdown_open = false;
