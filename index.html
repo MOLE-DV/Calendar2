@@ -4,11 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OKalendar</title>
-    <script src="script.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <script src="public/js/script.js"></script>
+    <script type="module" src="public/js/checkLogin.js"></script>
+    <link rel="stylesheet" href="public/css/style.css">
 </head>
 <body>
     <div id="GUI">
+        <div id="taskCreator">
+            <div id="hideBtn" onclick="hideTaskCreator(this.parentElement)">x</div>
+            <div id="creatorForm">
+                <div id="title">Add new task</div>
+                <input name="name" class="textField" placeholder="Task Name" id="taskCreator_Name">
+                <textarea name="description" class="textArea" placeholder="Description" id="taskCreator_Desc"></textarea>
+                <input type="date" class="date" id="taskCreator_Date">
+                <div class="timeButton"><div id="l">Start</div><div id="r"><input name="startTime" type="time" id="taskCreator_startTime"></div></div>
+                <div class="timeButton"><div id="l">End</div><div id="r"><input name="endTime" type="time" id="taskCreator_endTime"></div></div>
+                <input class="button" type="submit" value="Add" onclick="addTask()">
+            </div>
+        </div>
         <div id="drop">
 
         </div>
@@ -28,9 +41,8 @@
             <div id="left">
                 <div id="title"><span>OK</span>::alendar</div>
                 <div id="settings">
-                    <div class="button">New Task</div>
-                    <div class="button">Click Me!</div>
-                    <div class="button">Click Me!</div>
+                    <a class="button" href="login.html">Login</a>
+                    <button class="button" onclick="viewTaskCreator()">New Task</button>
                     <div id="zipper"><div id="track"><div id="selector"></div></div><div class="zip_btn" onclick="zip_change(this.parentElement, this)">Day</div><div class="zip_btn" onclick="zip_change(this.parentElement, this)">Week</div><div class="zip_btn" onclick="zip_change(this.parentElement, this)">Month</div><div class="zip_btn" onclick="zip_change(this.parentElement, this)">Year</div></div>
                 </div>
             </div>

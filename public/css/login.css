@@ -1,0 +1,43 @@
+@import "./style.css";
+
+*{margin: 0; box-sizing: border-box; overflow: hidden;}
+
+#container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-position: 0px 0px;
+    width: 100vw;
+    height: 100vh;
+    background-image: linear-gradient(-45deg, var(--blue), #9019ff);
+}
+
+#signup{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/*Login box*/
+#login{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: calc(20vh + 20vw);
+    width: calc(15vh + 15vw);
+    background-color: white;
+    position: relative;
+}
+
+.textArea{
+    height: calc(2vh + 2vw);
+}
+
+#title{
+    text-shadow: 0 calc(.1vh + .1vw) calc(.1vh + .1vw) rgba(0, 0, 0, 0.404);
+}
+
+#bottom{
+    position: absolute;
+    bottom: calc(.5vh + .5vw);
+    display: flex;
+    justify-content: space-evenly;
+}

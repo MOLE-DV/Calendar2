@@ -1,0 +1,525 @@
+*{margin: 0; box-sizing: border-box; overflow-x: hidden;}
+
+@font-face {
+    font-family: Fonarto;
+    src: url('Fonts/FonartoLight-BWxv3.ttf');
+}
+
+:root{
+    --left_panel_size: 18vw;
+    --blue: rgb(117, 117, 255);
+    --yellow: rgb(255, 183, 0);
+    --box_shadow: 0 calc(.1vh + .1vw) calc(.1vh + .1vw) rgba(0, 0, 0, 0.206);
+}
+
+#container{
+    width: 100vw;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+}
+
+::-webkit-scrollbar{
+    display: none;
+}
+
+
+#down{
+    display: flex;
+    width: 100vw;
+    overflow-y: scroll;
+}
+
+#holder{                                            
+    display: flex;
+}
+
+#holder #d_left{
+    width: calc(2vh + 2vw);
+    display: flex;
+    flex-direction: column;
+    border-right: calc(.005vh + .005vw) solid rgb(219, 219, 219);
+}
+
+#holder #d_right{
+    width: calc(100vw - var(--left_panel_size));
+    height: fit-content;
+}
+
+#dat{
+    width: calc(100vw - var(--left_panel_size));
+    height: fit-content;
+    border-collapse: collapse;
+    margin-top: calc(2vh + 2vw);
+    margin-left: var(--left_panel_size);
+}
+
+#single, #drp_sel{
+    width: calc(100% - calc(2vh + 2vw));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: calc(.8vh + .8vw);
+}
+
+
+
+
+#box, #single_box{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: calc(.6vh + .6vw);
+    border: calc(.005vh + .005vw) solid rgb(219, 219, 219);
+    border-left: none;
+    border-top: none;
+    height: calc(4vh + 4vw);
+    width: calc((calc(100vw - var(--left_panel_size)) - calc(2vh + 2vw)) / 7);
+    display: flex;
+    justify-content: center;
+    float: left;
+    border-collapse: collapse;
+}
+
+
+
+#single_box{
+    width: calc(calc(100vw - var(--left_panel_size)) - calc(2vh + 2vw));
+}
+
+#box.time{
+    padding-top: calc(.1vh + .1vw);
+    width: calc(2vh + 2vw);
+    cursor: pointer;
+    transition: .1s;
+}
+
+
+#line{
+    position: absolute;
+    background-color: var(--blue);
+    z-index: 999;
+    width: 100vw;
+    pointer-events: none;
+    height: calc(.1vh + .1vw);
+    display: none;
+}
+
+#scr{
+    position: absolute;
+    font-size: calc(1vh + 1vw);
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--blue);
+    pointer-events: none;
+    z-index: 9999;
+}
+
+
+#day{
+    user-select: none;
+    display: flex;
+    width: calc(100vw - var(--left_panel_size));
+    height: calc(2vh + 2vw);
+    margin-left: var(--left_panel_size);
+    background-color: rgb(237, 237, 237);
+    box-shadow: var(--box_shadow);
+    position: fixed;
+    z-index: 10;
+}
+
+
+#day #box{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: .1s;
+}
+
+
+.button:hover{
+    background-color: var(--blue);
+    color: white;
+}
+
+#day #box.new_task{
+    width: calc(2vh + 2vw);
+    font-size: calc(1.5vh + 1.5vh);
+    background-color: var(--blue);
+    color: white;
+}
+
+#day #box.new_task:hover{
+    background-color: var(--yellow);
+    color: black;
+}
+
+
+/* Left settings panel */
+
+
+#down #left{
+    width: var(--left_panel_size);
+    background-color: rgb(246, 246, 246);
+    height: 100vh;
+    position: fixed;
+    z-index: 9999;
+    box-shadow: calc(.1vh + .1vw) 0 calc(.1vh + .1vw) rgba(0, 0, 0, 0.206);
+}
+
+
+
+
+#title{
+    font-family: Fonarto;
+    text-align: center;
+    padding: calc(1vh + 1vw);
+    font-size: 2vw;
+}
+
+#title span{
+    color: var(--blue);
+}
+
+/* settings */
+
+#settings{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(237, 237, 237);
+    padding-top: calc(1vh + 1vw);
+}
+
+/*button settings*/
+.button, .textField, .textArea , .date, .timeButton, #settings #zipper{
+    text-decoration: none;
+    color: black;
+    border: none;
+    font-family: Arial, Helvetica, sans-serif;
+    width: 16vw;
+    height: calc(2vh + 2vw);
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    box-shadow: 0 0 calc(.1vh + .1vw) rgba(0, 0, 0, 0.206);
+    cursor: pointer;
+    transition: .1s;
+    font-size: calc(.6vh + .6vw);
+    margin-bottom: calc(.5vh + .5vw);
+}
+
+
+.textField, .textArea, .date, .timeButton input, .timeButton{
+    border: none;
+    padding: calc(.3vh + .3vw);
+    color: gray;
+}
+
+.textArea{
+    height: calc(5vh + 5vw);
+    resize: vertical;
+}
+
+.textField:focus, .textArea:focus, .date:focus, .timeButton input:focus, .button:focus{ 
+    outline: none !important;
+    border-color: var(--blue);
+    box-shadow: 0 0 calc(.2vh + .2vw) var(--blue);
+    color: var(--blue);
+    padding: calc(.5vh + .5vw);
+    font-weight: bold;
+}
+
+.button:focus{
+    color: black;
+    font-weight: normal;
+}
+
+.date{
+    border: none;
+}
+
+.timeButton{cursor: default; justify-content: left; padding: 0;}
+
+.timeButton #l{
+    width: 20%;
+}
+.timeButton #r{
+    width: 80%;
+}
+.timeButton #l, .timeButton #r{
+    padding: calc(.3vh + .3vw);
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.timeButton input{
+    border: calc(.01vh + .01vw) solid rgb(199, 199, 199);
+    height: 100%;
+    width: 100%;
+    transition: .1s;
+    cursor: pointer;
+    margin-left: calc(1vh + 1vw);
+}
+
+#settings #zipper{
+    display: flex;
+}
+
+#zipper .zip_btn{
+    width: calc(16vw / 4);
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: .5s;
+    color:  black;
+    z-index: 2;
+    filter: invert(100px);
+}
+
+
+#track{
+    position: absolute;
+    width: 16vw;
+    height: calc(2vh + 2vw);
+}
+
+#selector{
+    position: absolute;
+    background-color: var(--blue);
+    width: calc(16vw / 4);
+    height: calc(2vh + 2vw);
+    margin-left: calc((16vw / 4) * 0);
+    transition: .3s;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* Month Tab */
+
+
+#box.month_days, #box.month_days_empty{
+    height: calc((calc(100vw - var(--left_panel_size))) / 7);
+    width: calc((calc(100vw - var(--left_panel_size))) / 7);
+    justify-content: left;
+    background-color: white;
+    z-index: 0;
+    position: relative;
+}
+
+
+#box.month_days:hover{
+    z-index: 1;
+    box-shadow: 0 0 calc(.5vh + .5vw) rgba(0, 0, 0, 0.206)
+}
+
+
+#box #day_id{
+   position: absolute;
+   height: calc(1vh + 1vw);
+   width: calc(1vh + 1vw);
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   font-size: calc(.7vh + .7vw);
+   color: white;
+   border-radius: 0px 0px calc(.1vh + .1vw) 0px;
+   background-color: var(--blue); 
+}
+
+#box.month_days, #box #day_id{
+    transition: .2s;
+}
+
+
+/* button panel */
+
+
+
+#month_holder .dropbutton{
+    width: calc(1.5vh + 1.5vw);
+    height: calc(1.5vh + 1.5vw);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    pointer-events: all;
+    cursor: pointer;
+}
+
+#month_holder #dropdown.dropbutton{
+    width: calc(10vh + 10vw);
+    background-color: white;
+}
+
+
+
+
+
+
+/* GUI */
+
+#GUI{
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+#GUI #drop{
+    z-index: 9999;
+    pointer-events: all;
+    box-shadow: 0 calc(.1vh + .1vw) calc(.1vh + .1vw) rgba(0, 0, 0, 0.206);
+    position: absolute;
+    width: calc(10vh + 10vw);
+    max-height: calc(10vh + 10vw);
+    background-color: white;
+    left: calc(var(--left_panel_size) + calc(2vh + 2vw) + calc(100vw - var(--left_panel_size) - calc(2vh + 2vw)) / 2 - calc(2 * calc(1.5vh + 1.5vw) + calc(10vh + 10vw)) / 2 + calc(1.5vh + 1.5vw));
+    top: calc(calc(2vh + 2vw) / 2 + calc(1.5vh + 1.5vw) / 2);
+}
+
+#GUI #drop::-webkit-scrollbar{
+    display: block;
+    width: calc(.4vh + .4vw);
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+#GUI #drop::-webkit-scrollbar-thumb{
+    background-color: rgba(0, 0, 0, 0.202);
+}
+
+#GUI #drop #d_m{
+    user-select: none;
+    cursor: pointer;
+    font-family: Arial, Helvetica, sans-serif;
+    height: calc(1.5vh + 1.5vw);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: .1s;
+}
+
+#GUI #drop #d_m:hover, #GUI #drop #d_m.current:hover{
+    background-color: var(--blue);
+    color: white;
+}
+
+#GUI #drop #d_m.current{
+    background-color: rgba(2, 2, 2, 0.076)
+}
+
+#month_holder .button:hover, #month_holder #dropdown.button:hover{
+    background-color: var(--blue);
+    color: white;
+    transition: .2s;
+}
+
+
+
+#g_day{
+    display: none;
+    position: absolute;
+    height: calc(1.5vh + 1.5vw);
+    background-color: rgb(255, 255, 255);
+    width: calc(100vw - var(--left_panel_size));
+    left: var(--left_panel_size);
+    box-shadow: 0 calc(.1vh + .1vw) calc(.1vh + .1vw) rgba(0, 0, 0, 0.206);
+    top: calc(2vh + 2vw);
+}
+
+#g_day #box{
+    width: calc((100vw - var(--left_panel_size)) / 7); 
+    display: flex;
+    line-height: calc(1.5vh + 1.5vw);
+}
+
+#month_holder{
+    display: flex;
+    align-items: center;
+    font-family: Arial, Helvetica, sans-serif;
+    justify-content: center;
+    width: calc(100vw - var(--left_panel_size) - calc(2vh + 2vw));
+}
+
+/* task creator in GUI */
+
+
+/*slide Animation*/
+@keyframes RightSlide { 
+    from{
+        display: none;
+        right: -20vw;
+    }
+}
+
+#taskCreator.forward{
+    margin-right: 0;
+}
+
+#taskCreator.reverse{
+    margin-right: -20vw;
+}
+
+#taskCreator{
+    transition: .5s;
+    position: fixed;
+    z-index: 999;
+    background-color: #EDEDED;
+    width: 20vw;
+    height: 100vw;
+    margin-right: -20vw;
+    right: 0;
+    pointer-events: all;
+    box-shadow: calc(-.1vh - .1vw) 0 calc(.1vh + .1vw) rgba(0, 0, 0, 0.206);
+    display: flex;
+    flex-direction: column;
+}
+
+#taskCreator #hideBtn{
+    height: calc(1.5vh + 1.5vw);
+    width: calc(1.5vh + 1.5vw);
+    border-bottom-left-radius: calc(.5vh + .5vw);
+    right: 0;
+    position: absolute;
+    background-color: var(--blue);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: calc(1vh + 1vw);
+    user-select: none;
+    cursor: pointer;
+    
+}
+
+#taskCreator #creatorForm{
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+#taskCreator #creatorForm #title{
+    width: 100%;
+    height: fit-content;
+    background-color: #F6F6F6;
+    margin-bottom: calc(1vh + 1vw);
+}
+
